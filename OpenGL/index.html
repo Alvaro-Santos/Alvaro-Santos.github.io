@@ -1,9 +1,204 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>OpenGL page</title>
+    <title>OpenGL on Windows</title>
 </head>
 <body>
-    <p>This is an explanation etc</p>
+    <h1>Reason for this page:</h1>
+    <p>There is a noticeable lack of information about OpenGL on the web, particularly as you try to search for information regarding more recent versions of the API. Most noticeably, there is not a single book, webpage or video on the internet (as far as I'm aware) that concisely explains in full detail how to compile a program that uses the OpenGL API and that
+        <li>
+        <ul>Is written in C</ul>
+        <ul>Uses shaders (GLSL)</ul>
+        <ul>Uses the FreeGLUT library</ul>
+        <ul>Uses the GLEW library</ul>
+        <ul>Uses the MinGW compiler suite</ul>
+        <ul>Does NOT use or depend in any way, shape or form on anything else (in particular, on Microsoft's Visual Studio bloated IDE)</ul>
+    on a Windows system.
+        </li>
+    </p>
+    
+    <p>The goal of this page <strong>is</strong> to provide such an explanation, along with reasonably complex source code for you to test your compiler on (and not just the typical trivial red triangle sitting on the screen), as well as a superficial short explanation of what each library is for, aimed at people who are writing their first OpenGL program. Additionally, the final program should be able to run on other Windows machines, without the need to install anything else (i.e. run natively on Windows machines).</p>
+    
+    <p>The goal of this page <strong>is not</strong> to provide an in-depth explanation of these libraries' purpose, nor to provide in-depth information of the compiling process (ex: how to cross-compile towards other machines, how to compile 64 bit programs instead of 32 bit, etc).</p>
+    
+    <h1>Introduction:</h1>
+    <p>The process here described works on a Windows 7 64 bit machine, with the libraries specified above, to compile and run 32 bit programs.<br>
+    If you are new to programming in general, you may not understand what good it'd be to compile a 32 bit program on a 64 bit machine. All you need to know is that this works, and that it'll pose no problem in running the program. Windows will make sure to run it in a special compatibility mode which emulates ("fakes") a 32 bit OS.</p>
+    
+    <p>You must know GLSL, C and the OpenGL API to follow the code to test your program. However, you are not required to know any language to follow the tutorial, as we'll not be writing any programs of our own, but simply setting up the environment in which we are able to do so. If you are using C++, adapting this tutorial to use your compiler should be easy, but I have not done so and am unaware of any possible surprising ways in which such an adaptation may fail.</p>
+    
+    <h1>Table of contents:</h1>
+        <li>
+        <ul><a href="#mingw">Installing MinGW</a></ul>
+        <ul><a href="#freeglut">Setting up FreeGLUT</a></ul>
+        <ul><a href="#glew">Setting up GLEW</a></ul>
+        <ul><a href="#compiling">Compiling and running a program</a></ul>
+        </li>
+    <h2 id="mingw">Installing MinGW</h2>
+    <p>MinGW is, succintly but incorrectly, gcc for Windows.<br>
+    More correctly, MinGW is a collection of compilers, identical to the GNU Compiler Collection on Linux, and some GNU libraries.
+    MSYS, which is a command line interpreter (like cmd.exe) with a collection of common Linux programs such as make and grep, can optionally be installed along with MinGW (we'll be needing it).</p>
+    
+    <p>MinGW and MSYS's website can be found <a href="http://www.mingw.org/">here</a>, and the MinGW installer's webpage can be found <a href="https://sourceforge.net/projects/mingw/files/latest/download?source=files">here</a> (this installer will also serve to install MSYS).</p>
+    
+    <p>MinGW's installer has a graphical mode (the default mode) and its <a href="http://www.mingw.org/wiki/Getting_Started">installation webpage</a> is mostly clear and easy to follow, but, if everything works for you as it did for me, you should be able to install everything successfully by reading only the following sections:
+    <li>
+        <ul>&laquo;<a href="http://www.mingw.org/wiki/Getting_Started#toc0">MinGW Installation Notes</a>&raquo;</ul>
+        <ul>&laquo;<a href="http://www.mingw.org/wiki/Getting_Started#toc1">Graphical User Interface Installer</a>&raquo;</ul>
+    </li>
+    
+    You may also need to read the following sections:
+    <li>
+        <ul>&laquo;<a href="http://www.mingw.org/wiki/Getting_Started#toc2">After Installing You Should...</a>&raquo; [The file that this section asks you to edit was already right the first time I checked it, so you may want to skip it. Editing the file is very easy however, and it's not a long section]</ul>
+        <ul>&laquo;<a href="http://www.mingw.org/wiki/Getting_Started#toc6">Cautions</a>&raquo; [If you're using old versions of MSYS or you want to use libraries other than the ones I've already mentioned we're going to use]</ul>
+        <ul>&laquo;<a href="http://www.mingw.org/wiki/Getting_Started#toc6">Cautions</a>&raquo; and &laquo;<a href="http://www.mingw.org/wiki/Getting_Started#toc7">Environment Settings</a>&raquo; [If you intend on using MinGW or MSYS's utilities outside of MSYS - for example, if you want to use gcc from a cmd.exe window. I will, however, assume that you're using MSYS every time we need to do something on a command line, so don't bother with these sections on your first read through this tutorial]</ul>
+    </li>
+    </p>
+    
+    <p>Regardless of which sections you do end up reading, the installation process is pretty standard and intuitive. The only thing to note is where you end up creating your MinGW folder. Personally, I chose to leave mine as the installer suggests, located at <code>C:\</code> (with the full path to the folder being <code>C:\MinGW\</code>). I will be assuming that you did so as well, but in case you didn't, don't forget to replace <code>C:\MinGW\</code> with <code>Your\Path\To\The\MinGW\Folder\</code> as you read this text.</p>
+    
+    <p>Assuming you've run the installer (which should be easy, as you don't even have to modify any of the default settings), you should now have something called "MinGW Installation Manager" on your computer. Running this program will present you with a list of packages available for you to install. The packages you're going to need are:
+    <li>
+        <ul>mingw32-base</ul>
+        <ul>msys-base</ul>
+        <ul>mingw-developer-toolkit</ul>
+    </li>
+    
+        These should suffice. After selecting these packages, you may select &laquo;All Packages&raquo; instead of &laquo;Basic Setup&raquo; on the left side of the window to add anything else you find interesting, but this is neither needed nor recommended at this time since you can always launch the installation manager again and do it at a later time. Be sure not to remove any of the already selected packages. If you do, click on <code>Installation > Apply Changes</code> and Discard, then reselect the packages listed above.<br>
+        After you're done, apply your changes (<code>Installation > Apply Changes</code> and Apply).
+    </p>
+    
+    <p>Finally, once everything is installed, go to <code>C:\MinGW\msys\1.0\</code>, right click on msys.bat and create a desktop shortcut for it. Go to the desktop, click on that shortcut and you should see a command line window appear.<br>
+    To make sure you're able to use the compiler, create a C source code file (example provided below), place it in <code>C:\MinGW\msys\1.0\home\YourWindowsAccountName\</code> (the full path to the file, after placing it, should be <code>C:\MinGW\msys\1.0\home\YourWindowsAccountName\FileName.c</code>) and issue <code>gcc -o FileName.exe FileName.c</code> on your MSYS window. This should create an executable which you can run either by issuing <code>./FileName.exe</code> or <code>FileName.exe</code>.</p>
+    
+    <div>Sample code:<br>
+        <code>
+        #include &lt;stdio.h&gt;<br>
+        <br>
+        int main(void) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;puts("I work");<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return 0;<br>
+        }<br>
+        <br>
+        </code>
+    </div>
+    
+    <p>At this point, if everything happened as described and you successfully compiled and ran a program, MinGW (+ MSYS) should be working in full.</p>
+    
+    <h2 id="freeglut">Setting up FreeGLUT</h2>
+    
+    <p>FreeGLUT is a windowing library. It sets up windows in which you can render OpenGL objects. We need it because OpenGL, by itself, does not know about the environment in which it exists - it doesn't know whether it's on a Windows window, a Linux window or a MacOS window. While FreeGLUT is not the only way of doing this (there are many other libraries with similar purposes), it's one of the most tried and tested ones. <em>In extremis</em>, we wouldn't even need to install a library like this, and could just resort to using Windows's own window-related functions, but this would make our code unportable. Using FreeGLUT ensures that our code will run (mostly) unaltered on basically any platform you're realistically going to encounter.</p>
+    
+    <p>FreeGLUT's website can be found <a href="http://freeglut.sourceforge.net/">here</a>, but we're actually going to focus on <a href="http://www.transmissionzero.co.uk/computing/using-glut-with-mingw/">another website</a>. The reason for this is that FreeGLUT's website does not provide the compiled libraries - only their source code - while the second website does (on top of having its own guide to installing FreeGLUT). Downloading the libraries from this website will spare us the trouble of trying to compile things on Windows.</p>
+    
+    <p>You can download the compiled libraries from the second website linked in the previous paragraph at <a href="http://files.transmissionzero.co.uk/software/development/GLUT/freeglut-MinGW.zip">this</a> link. While that website's guide to installing FreeGLUT should work, and I encourage you to read it in full later, I recommend you follow a slightly modified version of it at first: Focus on the &laquo;Setting Up freeglut With MinGW&raquo; section. Instead of creating a folder called <code>C:\Program Files\Common Files\MinGW\freeglut\</code> to place the <code>lib\</code> (<code>WhereverYou\ExtractedTheZip\freeglut\lib\</code>) and <code>include\</code> (<code>WhereverYou\ExtractedTheZip\freeglut\include\</code>) folders in, simply place <code>libfreeglut.a</code> (<code>WhereverYou\ExtractedTheZip\freeglut\lib\libfreeglut.a</code>) and <code>libfreeglut_static.a</code> (<code>WhereverYou\ExtractedTheZip\freeglut\lib\libfreeglut_static.a</code>) in <code>C:\MinGW\lib\</code>, doing the same for <code>freeglut.h</code> (<code>WhereverYou\ExtractedTheZip\freeglut\include\freeglut.h</code>), <code>freeglut_ext.h</code> (<code>WhereverYou\ExtractedTheZip\freeglut\include\freeglut_ext.h</code>), <code>freeglut_std.h</code> (<code>WhereverYou\ExtractedTheZip\freeglut\include\freeglut_std.h</code>) and <code>glut.h</code> (<code>WhereverYou\ExtractedTheZip\freeglut\include\glut.h</code>) by placing them in <code>C:\MinGW\include\GL\</code>.<br>
+    Additionally, don't bother placing <code>freeglut.dll</code> (<code>WhereverYou\ExtractedTheZip\freeglut\bin\freeglut.dll</code>) in either System32 or SysWOW64. <span id="opengl_folder">Instead, simply place it on a folder on your desktop (this is where you'll keep all of your OpenGL program's code)</span>.</p>
+    
+    <p>Since all of the FreeGLUT files that needed to be compiled had already been so, and since we can't compile anything yet (we still need another library), this is all you need to read of that webpage for now. As I have already said, I encourage you to read the rest at a later time, but for now there's really no need.</p>
+    
+    <h2 id="glew">Setting up GLEW</h2>
+    
+    <p>OpenGL has had many, many, many extensions/revisions during its life. A side-effect of this is that it forces you to manually enable many of these extensions it's had over the years. While possible to do this yourself, it's extremely (emphasis on "extremely") cumbersome. GLEW takes care of this for us by testing which extensions are available on your platform and enabling them automatically. The result is that you can use the entirety of OpenGL that's available on your platform instead of being restricted to a very basic and somewhat archaic subset of the API.</p>
+    
+    <p>Unlike FreeGLUT, the GLEW developers provide compiled binaries on their <a href="http://glew.sourceforge.net/index.html">website</a>. However, at the time of writing (January 10th, 2017), those binaries were compiled to be used with Visual Studio and do not work without it. As the goal of this text is to compile an OpenGL program without using Visual Studio, you'll instead have to compile the binaries yourself. However, again, there's a <a href="https://github.com/nigels-com/glew/issues/96">bug</a> in the makefile to generate the binaries from GLEW's source code. As a result of all this, we'll have to patch the makefile first, and only then may we compile the source code. On the plus side, this is a chance to further test whether or not MSYS is working well, as we'll be using it to run make.</p>
+    
+    <p>Start by downloading the source files from the GLEW project website, or directly from <a href="https://sourceforge.net/projects/glew/files/glew/2.0.0/glew-2.0.0.zip/download">this</a> link. After unzipping them, go <code>Wherever/YouUnzziped/glew-2.0.0/</code> and open <code>Makefile</code> with any editor you like. Then, as per the instructions <a href="https://github.com/nigels-com/glew/issues/96#issuecomment-264708661">here</a>, place
+    <div>New code:<br>
+        <code>
+        ifeq ($(filter-out mingw% cygwin,$(SYSTEM)),)<br>
+        BIN.LIBS := $(BIN.LIBS:-nostdlib=)<br>
+        endif
+        </code>
+    </div>
+            under
+    <div>Original Makefile:<br>
+        <code>
+        # GLEW utility programs<br>
+        <br>
+        BIN.LIBS = -Llib $(LDFLAGS.DYNAMIC) -l$(NAME) $(LDFLAGS.EXTRA) $(LDFLAGS.GL)</code>
+    </div>,resulting in
+    <div>New Makefile:<br>
+        <code># GLEW utility programs<br>
+        <br>
+        BIN.LIBS = -Llib $(LDFLAGS.DYNAMIC) -l$(NAME) $(LDFLAGS.EXTRA) $(LDFLAGS.GL)<br>
+        ifeq ($(filter-out mingw% cygwin,$(SYSTEM)),)<br>
+        BIN.LIBS := $(BIN.LIBS:-nostdlib=)<br>
+        endif
+        </code>
+    </div> (This should be somewhere near line 150 - the person who posted this fix says nearl ine 158, but it's closer to 152 for me).</p>
+    
+    <p>After modifying your Makefile, open up the MSYS command line and navigate to the root (<code>cd ../..</code>). Next, mount Window's filesystem onto MSYS's "filesystem". For example, if you've been downloading your files to <code>C:/</code>, you'd issue the command <code>mount C:/ /WindowsFS</code> (The name you choose for the second argument is irrelevant, as long as it's preceded by a <code>/</code>). You can think of this command as placing a link to <code>C:/</code> on the root folder</p> and thus enabling you to travel through the folders and files you have on Windows.<br>
+    After having mounted <code>C:/</code>, you'll need to travel to wheverever you have GLEW's files (including the modified Makefile instead of the original one). In my case, I extracted them to my desktop, which lives on my C: drive, onto a folder called <code>glew-2.0.0</code>, and my Windows account is called Penguin, so I'd issue a command like <code>cd WindowsFS && cd C:/Users/Penguin/Desktop/glew-2.0.0/glew-2.0.0/</code> (no, I did not repeat <code>glew-2.0.0</code> mistakenly - that's where I actually have my files).<br>
+    Now all that's left to do is issue a <code>make all</code> command, and that's it: you should now have compiled GLEW binaries ready to use.</p>
+
+    <p>Finally, it's time to move all of the binaries you generated into their places. The process is similar to the one for FreeGLUT: <code>.a</code> files go in <code>lib/</code>, <code>.h</code> go in <code>include/</code> and <code>.dll</code> files go onto the folder where we're keeping all of our OpenGL program's files (recall that I instructed you to create such a folder at <a href="#opengl_folder">the end of the previous section</a>).<br>
+    To go into full detail, let's say the folder where you have your GLEW Makefile (along with everything else GLEW-related) is simply <code>glew/</code> and that the folder with all the OpenGL program's files is <code>my_program/</code>. Then you'll need to copy <code>glew/lib/glew32.dll</code> to <code>my_program/</code> and <code>glew/lib/libglew32.a</code> along with <code>glew/lib/libglew32.dll.a</code> to <code>C:\MinGW\lib\</code>. Pay special attention to these last 3 files, as they have very similar names, but one is to be put in one folder while the other two belong in another folder.<br>
+    Finally, place all of the files in <code>glew/include/GL/</code> (eglew.h, glew.h, glxew.h and wglew.h) in <code>C:\MinGW\include\GL\</code>.</p>
+    
+    <p>This concludes all of the preparation to compile an OpenGL program on Windows. To recap, this should be the content of your folders:<br>
+    <li>
+        <ul><code>C:\MinGW\include\GL\</code>
+            <li>
+                <ul><code>eglew.h</code> (GLEW)</ul>
+                <ul><code>freeglut.h</code> (FreeGLUT)</ul>
+                <ul><code>freeglut_ext.h</code> (FreeGLUT)</ul>
+                <ul><code>freeglut_std.h</code> (FreeGLUT)</ul>
+                <ul><code>gl.h</code> (Placed by MinGW)</ul>
+                <ul><code>glew.h</code> (GLEW)</ul>
+                <ul><code>glext.h</code> (Placed by MinGW)</ul>
+                <ul><code>glu.h</code> (Placed by MinGW)</ul>
+                <ul><code>glut.h</code> (FreeGLUT)</ul>
+                <ul><code>glxew.h</code> (GLEW)</ul>
+                <ul><code>wglew.h</code> (GLEW)</ul>
+            </li>
+        </ul>
+        <ul><code>C:\MinGW\lib\</code>
+            <li>
+                <ul><code>libglew32.a</code></ul>
+                <ul><code>libglew32.dll.a</code></ul>
+                <ul><code>libfreeglut.a</code></ul>
+                <ul><code>libfreeglut_static.a</code></ul>
+                <ul>(Lots of other files placed by MinGW)</ul>
+            </li>
+        </ul>
+        <ul><code><a href="#opengl_folder">The folder where you're keeping your OpenGL program's files</a></code>
+            <li>
+                <ul><code>freeglut.dll</code></ul>
+                <ul><code>glew32.dll</code></ul>
+            </li>
+        </ul>
+    </li>
+        
+    Not all of these files are absolutely needed for what we're about to do, but I did a little bit of future proofing so that you'll be completely locked into compiling as I'm about to show you. Regardless of needing all of them or not, you should have all of these files if you followed the previous steps correctly, and I will assume you did.
+    </p>
+
+    <h2 id="compiling">Compiling and running a program</h2>
+    <p>This is possibly the easiest step. First, download the source code I've provided <a href="opengl.c" download>here</a>, <a href="opengl_math.c" download>here</a> and <a href="opengl_math.h" download>here</a>. Obviously, given the purpose of this entire webpage, you need not use my code for this step, but doing so eliminates the possibility of the compilation failing because of errors in the code and gives you a reasonably complex program to test your compiler setup with. Don't bother analysing the code (although you may modify it or repurpose it any way you want, as I am the owner of the code, as long as you do not hold me liable for its well-behavedness or anything else).<br>
+    Having downloaded the files, place them in the <a href="#opengl_folder">folder</a> where you're keeping your OpenGL files. Then, open MSYS and issue the command <code>cd ~/../../WindowsFS/ && cd C:/Users/Penguin/Desktop/SaidOpenGLFolder</code>.<br>
+    Finally, the last command you have to issue is <code>gcc -Wall -Wpedantic -o program.exe opengl.c my_opengl_stuff.c -lm -lglew32 -lfreeglut -lopengl32 -Wl,--subsystem,windows</code>. While explaining this command in-depth is beyond the scope of this webpage, <code>-Wall -Wpedantic</code> make the compiler be stricter, <code>-o program.exe</code> names the generated executable, <code>-lm</code> links the math library and <code>-Wl,--subsystem,windows</code> tells the linker (<code>-Wl</code>) that this will be a graphical program (<code>--subsystem,windows</code>) and that it shouldn't generate a console window when you run the program - try compiling the code I provide without this last flag to see an example of what I mean. <code>-lglew32 -lfreeglut -lopengl32</code> link the GLEW, FreeGLUT and OpenGL libraries, respectively, to the program, and are the only ones that should be new to a moderately competent C programmer (along with <code>-Wl,--subsystem,windows</code> if they aren't used to compiling on Windows - in which case they might be interested in reading more about it, so <a href="http://stackoverflow.com/questions/7474504/compiling-a-win32-gui-app-without-a-console-using-mingw-and-eclipse">here's</a> a place to get started).<br>
+    And that's it, you should have a program ready to run, either from MSYS via <code>./program.exe</code> or <code>program.exe</code>, or via double clicking on its icon like you'd do to any other Windows program. This program should be completely portable across Windows 7 (and over) versions, so you can share it with whoever you want. Don't forget to read the <a href="#caveats"><strong>Caveats</strong></a> section, though (I wrote it for a reason!)</p>
+
+	<h3>Example output:</h3>
+	<img src="opengl_on_windows.png" alt="An example of compiling + running the code I provided"> 
+	
+	<h4>A few things regarding the program:</h4>
+	<li>
+		<ul>The controls are: left/right arrows to move horizontally, up/down arrows to move vertically, PageUp/PageDown to move along the z axis (into/out of screen, so to speak).</ul>
+		<ul>It's normal for the lines to occasionally disappear as you move the eye around the object and it's normal for things to start getting clipped (disappearing) if you move around too much (moving until you reach X = 3.00, for example).</ul>
+		<ul>If you try to go over 9.99 in any direction (or under -9.99), the program may crash (this has to do with how I'm allocating the memory to store the messags you see on screen). While this is unlikely, it happening or not is completely dependent on your specific combination of tools (compiler, OS version, etc), so keep in mind that it's a possibility.</ul>
+	</li>
+	
+    <h3 id="caveats">Caveats:</h3>
+    <li>
+        <ul>Compiling like this will require you to keep the <code>.dll</code> files in the same folder as your executable for it to work. Solutions to this would be to somehow instruct Windows to look for them elsewhere (which I have not looked into, but should be relatively easy to do), to statically link all of the required libraries to the program (which would increase the executable's size; if you're interested in this, now is the time to finish reading <a href="http://www.transmissionzero.co.uk/computing/using-glut-with-mingw/">this</a> in full as well as <a href="http://stackoverflow.com/questions/11234386/compiling-simple-static-opengl-4-0-program-using-mingw-freeglut-and-glew">this</a> StackOverflow question) or to simply dump the <code>.dll</code>s where Windows will look for them automatically (which makes sharing your program harder, but easier to move around once the <code>.dll</code>s are in place; if you're interested in this, I suggest once more reading <a href="http://www.transmissionzero.co.uk/computing/using-glut-with-mingw/">this</a>).</ul>
+        <ul>The command above only compiles 32 bit programs. If you wish to specifically compile a 64 bit program, despite 32 bit programs working on 64 bit machines, you'll have to look for what compiler options you need to enable yourself. Very importantly, keep in mind that the libraries above (GLEW and FreeGLUT) are the 32 bit libraries - you'll have to replace them with the 64 bit versions (typically kept in the same folder as the 32 bit versions), but this is a detail I do not contemplate in the tutorial.</ul>
+        <ul>MinGW is very particular about options of the form <code>-lSomething</code>, refusing to work properly if they are not the <strong>last</strong> options passed to it (as I have taken the care to assure above).</ul>
+        <ul>In my example program, I included a file with a bunch of matrix/vectorial operations. There are libraries to perform these operations (some of them are even made with OpenGL in mind), but I felt like going through the extra trouble of adding that library would not be worth it. Someone who has managed to follow this tutorial ought to be able to find out how to add those libraries themselves if they choose to.</ul>
+		<ul>Some resources imply/outright say that you need to <code>#include &lt;Windows.h&gt;</code> before you <code>#include &lt;GL/glut.h&gt;</code>. However, the program I provided seems to compile without doing so (although I've done it anyway). I'm not exactly sure of why this is the case (it might be that some of the other libraries is already including <code>Windows.h</code>), but to be on the safe side, don't forget to always include it.</ul>
+    </li>
+
+    <h1>Closing remarks:</h1>
+    <p>I make no claim of ownership of the tools presented nor of the webpages hosted at the links provided. I am not associated with any of these people or projects, and most likely they do not even know of my existence. I have merely written down what I learnt from a particularly frustrating experience of my own in hopes that it'll help someone else out there (and so that I don't forget it).<br>
+    If you wish to contact me for any reason, you can do so at <strong>aa.santos@campus.fct.unl.pt</strong>, but please understand that I'm most likely not going to be able to help you if this tutorial doesn't work for you, as I'm neither a professional in setting up OpenGL work environments, nor do I ever wish to become one. If you have some suggestion to alter something, but don't want to email me, feel free to suggest a pull request on GitHub.</p>
 </body>
 </html>
