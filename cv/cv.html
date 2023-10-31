@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="/cv/cv.css"></link>
+	<script src="/cv/cv.js"></script>
+	<title>Álvaro Santos &mdash; Curriculum Vitae</title>
+</head>
+<!--
+	TBD:
+		- Use more semantic tags (`p` for description paragraphs, `span` for `div`s that are just inline text, tags like `section` and `head`).
+		- Ensure everything looks good on Safari.
+		- Ensure everything looks good on ultrawide monitors.
+		- Add portuguese translation.
+		- Add user-facing tips/guide on how to generate the best-looking PDF export.
+		- Add a button to copy the whole email at once (care must be taken to make it hard to tap accidentally on phones).
+-->
+<body>
+	<div id="sidebar"></div>
+
+	<div id="content">
+		<noscript>
+			<div id="noscript_message" class="section_title"><em>You seem to have JavaScript disabled.<br>That's ok.</em> The only things that won't work properly are the colour pickers & exporting to PDF.</div>
+		</noscript>
+
+		<div id="header">
+			<div id="name">Álvaro António Silva Ferreira Vieira Santos</div>
+
+			<div id="location_and_contacts">
+				<div class="section_row">
+					<div class="section_row_title">Location:</div>
+					Lisbon Metropolitan Area, Portugal
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Email:</div>
+					alvaro.work.<span class="bot_protection">{If you're not a web crawler/bot, replace this with <span class="replacement">santos</span>}</span>@gmail.com
+				</div>
+
+				<div class="website_links">
+					<a href="https://www.linkedin.com/in/alvaro-antonio-santos/" target="_blank"><img src="/cv/linkedin_logo.png" alt="LinkedIn logo" id="linkedin_logo" class="website_logo"/>/alvaro-antonio-santos</a>
+					<a href="https://github.com/Alvaro-Santos/" target="_blank"><img src="/cv/github-mark.png" alt="GitHub logo" class="website_logo"/>/Alvaro-Santos</a>
+				</div>
+			</div>
+
+			<div id="fixed_ui_container">
+				<button id="print_button" onclick="window.print()">Export to PDF</button>
+
+				<div id="colour_pickers_container">
+					<div id="random_colour_picker" class="colour_picker" tabindex="0" autofocus style="background-color: var(--accent-colour);">
+						<div id="spinning_cube">
+							<div class="content_pane"></div>
+							<div class="cube_face cube_front" style="background-color: rgb(255 255 0);"></div>
+							<div class="cube_face cube_back" style="background-color: rgb(0 255 0);"></div>
+							<div class="cube_face cube_left" style="background-color: rgb(0 0 255);"></div>
+							<div class="cube_face cube_right" style="background-color: rgb(255 0 0);"></div>
+							<div class="cube_face cube_top" style="background-color: rgb(255 127 0);"></div>
+							<div class="cube_face cube_bottom" style="background-color: rgb(255 0 255);"></div>
+						</div>
+					</div>
+					<div class="colour_picker ondulating_colour" tabindex="0" style="animation-name: ondulating-colours-1; animation-delay: calc(-1 * 0.75 * var(--ondulating-colour-animation-duration));"></div>
+					<div class="colour_picker ondulating_colour" tabindex="0" style="animation-name: ondulating-colours-2; animation-delay: 0s;"></div>
+					<div class="colour_picker" tabindex="0" style="background-color: rgb(249 243 90);"></div><!-- TBD: Undecided on whether I like this one or `rgb(247 253 163)` better -->
+					<div class="colour_picker" tabindex="0" style="background-color: rgb(160 34 40);"></div>
+					<div class="colour_picker" tabindex="0" style="background-color: rgb(0 0 100);"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="section">
+			<div class="section_title">Quick intro:</div>
+
+			<div class="section_block">
+				<ul>
+					<li>Currently a full-stack developer, but my interests are broad.</li>
+					<li>My work style is autonomous, methodical, and thorough.</li>
+					<li>I think most programming languages are fungible and that the few exceptions make for interesting work.</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="section">
+<div class="break_after_fix">
+			<div class="section_title">Work experience:</div>
+
+			<div class="section_block">
+				<div class="section_row">
+					<div class="section_row_title">Role:</div>
+					Software Developer
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Where:</div>
+					Epos Now (Remote)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Period:</div>
+					February 2023 &ndash; Present
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Description:</div>
+					<div class="description_text">Continuation of the previous role. The major projects I have worked on are the Kitchen Display System rework (in which we overhauled the entire build process & deleted/reworked more than a third of the project's code) and the company's Credit Card Surcharging offering.</div>
+				</div>
+			</div>
+</div>
+
+			<div class="section_block">
+				<div class="section_row">
+					<div class="section_row_title">Role:</div>
+					Junior Software Developer
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Where:</div>
+					Epos Now (Remote)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Period:</div>
+					November 2021 &ndash; January 2023
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Description:</div>
+					<div class="description_text">Full-stack software development with an emphasis on front-end. Most of the front-end work was done with TypeScript and React, and most of the back-end work was done with C# and SQL. Other technologies were used less often on a project-by-project basis.</div>
+					<div class="description_text">Noteworthy projects I've been a part of include the rework of our Kitchen Display System and designing/implementing the company's Spanish Fiscalisation offering. Interesting tasks include debugging sessions deep enough to reach Chromium's source code on more than one occasion & performing digital archaeology on legacy systems.</div>
+				</div>
+			</div>
+
+			<div class="section_block">
+				<div class="section_row">
+					<div class="section_row_title">Role:</div>
+					Teaching Assistant
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Where:</div>
+					Informatics Department at FCT-UNL (On-site and remote)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Period:</div>
+					(Intermittent) September 2017 &ndash; July 2021
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Description:</div>
+					<div class="description_text">Term-long positions for several classes (Computer Graphics, Algorithms & Data Structures, Object-Oriented Programming). My responsibilities were to run lab classes, hold office hours, grade projects & tests, and oversee tests & exams.</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="section">
+<div class="break_after_fix">
+			<div class="section_title">Education:</div>
+
+			<div class="section_block">
+				<div class="section_row">
+					<div class="section_row_title">Program:</div>
+					PhD in Computer Science
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Where:</div>
+					FCT-UNL (Faculdade de Ciências e Tecnologia da Universidade Nova de Lisboa)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Period:</div>
+					September 2020 &ndash; August 2021 (Did not complete)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Classification:</div>
+					N/A
+				</div>
+			</div>
+</div>
+
+			<div class="section_block">
+				<div class="section_row">
+					<div class="section_row_title">Program:</div>
+					Integrated Master's in Computer Science and Engineering
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Where:</div>
+					FCT-UNL (Faculdade de Ciências e Tecnologia da Universidade Nova de Lisboa)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Period:</div>
+					September 2014 &ndash; July 2020
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Classification:</div>
+					18/20
+				</div>
+			</div>
+		</div>
+
+		<div class="section" id="skill_section">
+<div class="break_after_fix">
+			<div class="section_title">Skills:</div>
+
+			<div class="section_block">
+<div class="break_after_fix">
+				<div class="subsection_title">Technological stuff I:</div>
+
+				<ul>
+					<li><em>Use pretty often at work:</em> git, TypeScript (& JavaScript, React, Redux, Jest + React Testing Library, Karma + Mocha + Chai, Webpack, Node, HTML, CSS), C# (& ASP.NET), SQL (mostly SQL Server & SQLite, occasionally PostgreSQL).</li>
+				</ul>
+</div>
+
+				<ul>
+					<li><em>Use every now and again at work:</em> Python, Shell Scripting, Go, nginx, Miscellaneous DevOps Tools (GitLab pipelines, Podman, Kubernetes, AWS, Terraform).</li>
+					<li><em>Used pretty often during my course:</em> Java (default language for several classes), WebGL (in a computer graphics class for which I was a teacher's assistant thrice).</li>
+					<li><em>Was exposed to in varying amounts during my course:</em> C, OCaml, Scala & Akka, C++ & CUDA, Prolog, Kafka, Verifast, Dafny.</li>
+					<li><em>Would like to use or learn, or that I just think looks neat:</em> Rust, Erlang/Elixir, Pony, Haskell, Idris, SMT solvers in general, TLA+. Lisps in general deserve an honourable mention although I go back and forth on my opinion of them.</li>
+				</ul>
+			</div>
+</div>
+
+			<div class="section_block">
+<div class="break_after_fix">
+				<div class="subsection_title">Linguistic:</div>
+
+				<ul>
+					<li>My <em>native</em> language is <em>Portuguese</em>.</li>
+				</ul>
+</div>
+
+				<ul>
+					<li>I was also raised speaking <em>English</em> in a bilingual household &mdash; I would describe my proficiency level as "<em>native</em> with an accent and the occasional idiosyncrasy".</li>
+				</ul>
+			</div>
+
+			<div class="section_block" id="misc_skills">
+<div class="break_after_fix">
+				<div class="subsection_title">Miscellaneous:</div>
+
+				<ul>
+					<li><em>My work style is autonomous, thorough, and methodical.</em> I make a conscious effort to solve things by myself when possible, and I always approach tasks with the goal of not only "resolving" them but of also gaining a deep understanding of the problem domain. The prototypical example of this is the time I tracked down a slowdown in some TypeScript code to Chromium changing a build configuration's default value and fixed it for a 100x speed-up.</li>
+				</ul>
+</div>
+
+				<ul>
+					<li><em>I fully embrace asynchronous & open communication.</em> Text-based asynchronous communication is easy to share and persist, allowing people to join the conversation at their own leisure & giving each participant time to structure out their thoughts. I often volunteer to create written summaries of voice-based meetings to ensure everyone has a chance to join the conversation.</li>
+
+					<br class="firefox_print_only">	<!-- TBD: Needed until Firefox supports the `orphans` CSS attribute. -->
+
+					<li><em>I naturally gravitate towards mentoring & leading roles.</em> Partly because of the depth of the knowledge I accumulate through my thorough investigations, partly because of my previous experience in teaching roles, and partly because of my personality, I regularly end up in "force-multiplier" roles in spite of having few years of industry experience.</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="section">
+<div class="break_after_fix">
+			<div class="section_title">Events:</div>
+
+			<div class="section_block">
+				<div class="section_row">
+					<div class="section_row_title">Event:</div>
+					OPLSS (Oregon Programming Languages Summer School)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Role:</div>
+					Participating PhD student
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">When:</div>
+					June 2021
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Where:</div>
+					Online due to the COVID-19 pandemic
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Description:</div>
+					Summer school for various advanced topics in Programming Languages.
+				</div>
+			</div>
+</div>
+
+			<div class="section_block">
+				<div class="section_row">
+					<div class="section_row_title">Event:</div>
+					POPL (Principles of Programming Languages)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Role:</div>
+					Student volunteer
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">When:</div>
+					January 2019
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Where:</div>
+					Cascais, Lisbon
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Description:</div>
+					Research conference in the field of Programming Languages.
+				</div>
+			</div>
+
+			<div class="section_block">
+				<div class="section_row">
+					<div class="section_row_title">Event:</div>
+					Outreach events for the Informatics Department at FCT-UNL (EXPO FCT, Ciência Viva, TOPAS LX, NOVA Steam Academy, ClubeMath, Noite Europeia dos Investigadores)
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Role:</div>
+					Help organise the events and/or monitor & assist the participants
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">When:</div>
+					2017 &ndash; 2019
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Where:</div>
+					Mostly at FCT-UNL
+				</div>
+
+				<div class="section_row">
+					<div class="section_row_title">Description:</div>
+					Open days at the department, programming contests, summer courses & one-off programming sessions for primary and secondary school students.
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
