@@ -1,7 +1,8 @@
 /*
 	TBD:
 	- Perfect the page when being zoomed in/out (at the time of writing: the sticky interface ends up being too big, the sidebar takes up too much of the viewport when zooming in on taller-than-wide devices, the page gets a horizontal scrollbar when zoomed in a lot, and the section titles sometimes overflow their backgrounds).
-	- Ensure all animations (the ondulating colours & the spinning cube) respect users sensitive to them/respect preferences for reduced motion if appropriate: https://developer.mozilla.org/en-US/docs/Web/API/Animation#accessibility_concerns
+	- Ensure all animations (the ondulating colours & the spinning cube) respect users sensitive to them/respect preferences for reduced motion if appropriate: https://developer.mozilla.org/en-US/docs/Web/API/Animation#accessibility_concerns.
+	- Make text slightly smaller on mobile & sticky interface slightly larger.
 */
 
 :root {
