@@ -47,6 +47,8 @@ function evaluate_contrast(background_colour) {
     return {
         enough: (highest_contrast === 'white' ? white_contrast_ratio : black_contrast_ratio) >= 7,
         which: highest_contrast,
+        white_contrast_ratio,
+        black_contrast_ratio,
     };
 }
 
@@ -227,6 +229,23 @@ function pick_colour(event) {
         const accent_contrast_colour = contrast_info.which;
         set_accent_colours([accent_colour, accent_contrast_colour]);
     }
+}
+
+function force_company_colour(company_colour) {
+    let company_colour_obj = company_colour, company_colour_string = company_colour;
+
+    if(typeof company_colour === 'string') {
+        company_colour_obj = parse_rgb(company_colour);
+    } else {
+        company_colour_string = `rgb(${company_colour.R} ${company_colour.G} ${company_colour.B})`;
+    }
+
+    const contrast_info = evaluate_contrast(company_colour_obj);
+    if(!contrast_info.enough) {
+        console.info(`Contrast between ${company_colour_string} and ${contrast_info.which} is only ${contrast_info.which === 'black' ? contrast_info.black_contrast_ratio : contrast_info.white_contrast_ratio} (should be >= 7)`);
+    }
+
+    set_accent_colours([company_colour_string, contrast_info.which]);
 }
 
 let original_title;
