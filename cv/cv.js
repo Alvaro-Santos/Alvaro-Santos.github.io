@@ -122,6 +122,7 @@ function set_accent_colours([accent_colour, accent_contrast_colour]) {
     document.documentElement.style.setProperty('--accent-contrast-colour', accent_contrast_colour);
 }
 
+//TODO: Spaces between colours should be optional if , are present
 //Parsing the alpha channel is just a safety guard (and ends up being needed in the `interpolatedBestTextColour` code below, although it's currently commented out). Making the commas optional is also just a safety guard, as in almost all situations RGB values have `,` when read via `.style` or `window.getComputedStyle` ("almost all" because the browser seems incapable of doing this for custom attributes -- probably for the same reason it can't do interpolation and requires the `@property` declaration --, thus the `--accent-colour` attribute on the `html` tag is read back without commas, which doesn't really matter because we never read it back). The `/` in the alpha channel is also just a safety guard, as that's also acceptable syntax for the `rgb` CSS function (although browsers will add a comma when reading back, similarly to what happens for other channels).
 const rgb_regex = /rgba?\((?<R>\d+),? (?<G>\d+),? (?<B>\d+)((,|\/)? (?<A>\d+|0.\d+))?\)/;
 function parse_rgb(rgb_colour) {
@@ -231,6 +232,7 @@ function pick_colour(event) {
     }
 }
 
+//TODO: Should accept hex colours as well
 function force_company_colour(company_colour) {
     let company_colour_obj = company_colour, company_colour_string = company_colour;
 
